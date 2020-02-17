@@ -1,34 +1,17 @@
 # Asynchronous HBase
 
-This is an alternative Java library to use HBase in applications that require
-a fully asynchronous, non-blocking, thread-safe, high-performance HBase API.
+此库是基于 asynchbase next 分支修改的源码，主要是替换了 protobuf-java 包名，使得其不依赖 google 开源的 protobuf-java, 
+也就不存在 protobuf-java 兼容问题
 
-This HBase client differs significantly from HBase's client (HTable).
-Switching to it is not easy as it requires to rewrite all the code that was
-interacting with any HBase API.  This pays off in applications that are
-asynchronous by nature or that want to use several threads to interact
-efficiently with HBase.
+### 实现:
 
-Documentation can be found under http://opentsdb.github.io/asynchbase/
+#### 需要了解的地方：
 
-Please read the Javadoc starting from the HBaseClient class.  This class
-replaces all your HTable instances.  Unlike HTable, you should have only
-one instance of HBaseClient in your application, regardless of the number
-of tables or threads you want to use.  The Javadoc also spells out rules
-you have to follow in order to use the API properly in a multi-threaded
-application.
+1. hyrule-hbase 依赖主要包含 asynchbase 和 hbase-client 两个库 
+2. asynchbase 和 hbase-client 目前版本默认依赖的是 2.5.0 版本的 protobuf-java 
+3. hyrule-hbase 中的 asynchbase 依赖的 protobuf-java(3.x) 存在兼容问题
+4. 经过测试，hyrule-hbase 依赖的 hbase-client  兼容 protobuf-java(3.x) 版本
 
-The [GitHub repo branches](https://github.com/OpenTSDB/asynchbase) are laid 
-out as follows:
+#### 解决兼容方法：
 
-* [`maintenance`](https://github.com/OpenTSDB/opentsdb/tree/maintenance): This
-  was the last stable version of AsyncHBase and should only have bug fix PRs
-  created against it. Bugs should also be patched in master and next.
-
-* [`master`](https://github.com/OpenTSDB/opentsdb/tree/master): This is the
-  current stable version of AsyncHBase and should only have bug fix PRs created
-  against it. Bug should also be patched in the next branch.
-
-* [`next`](https://github.com/OpenTSDB/opentsdb/tree/next): This is the
-  development version of AsyncHBase and all new features or API changes should
-  be written against this.
+1. 自定义了asynchbase库(此版本不依赖 Google 的 protobuf-java)
